@@ -5,8 +5,13 @@
 
 
 export const commands = {
-async greet(name: string) : Promise<string> {
-    return await TAURI_INVOKE("greet", { name });
+async greet(name: string) : Promise<Result<string, AppError>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("greet", { name }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
 }
 }
 
@@ -20,7 +25,7 @@ async greet(name: string) : Promise<string> {
 
 /** user-defined types **/
 
-
+export type AppError = { type: "EmptyName" }
 
 /** tauri-specta globals **/
 

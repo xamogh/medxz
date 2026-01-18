@@ -8,7 +8,12 @@ function App() {
   const [name, setName] = useState("");
 
   async function greet() {
-    setGreetMsg(await commands.greet(name));
+    const result = await commands.greet(name);
+    if (result.status === "ok") {
+      setGreetMsg(result.data);
+    } else {
+      setGreetMsg(result.error.type);
+    }
   }
 
   return (
