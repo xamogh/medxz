@@ -5,9 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:db": "docker compose up -d db",
+    "dev:server": "cargo run -p medxz-server",
+    "dev:app": "pnpm tauri dev",
+    "dev:all": "pnpm dev:db && concurrently -k -n server,app -c blue,green \"pnpm dev:server\" \"pnpm dev:app\"",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "down": "docker compose down"
   },
   "dependencies": {
     "react": "^18.3.1",
@@ -19,6 +24,7 @@
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.2.0",
     "typescript": "~5.6.2",
     "vite": "^6.0.3",
     "@tauri-apps/cli": "^2"
