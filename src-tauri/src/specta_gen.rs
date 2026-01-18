@@ -2,10 +2,10 @@
 use specta_typescript::Typescript;
 use tauri_specta::{collect_commands, Builder};
 
-use crate::{__cmd__greet, __specta__fn__greet, greet};
+use crate::commands;
 
 pub fn builder() -> Builder<tauri::Wry> {
-    let builder = Builder::<tauri::Wry>::new().commands(collect_commands![greet]);
+    let builder = Builder::<tauri::Wry>::new().commands(collect_commands![commands::greet::greet]);
 
     #[cfg(debug_assertions)]
     builder
