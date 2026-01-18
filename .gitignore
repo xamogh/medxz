@@ -26,3 +26,13 @@ dist-ssr
 # Rust (Tauri)
 src-tauri/target
 src-tauri/gen
+
+# Rust workspace
+target
+
+# Local env
+.env
+.env.*
+
+# Server local storage
+server/storage

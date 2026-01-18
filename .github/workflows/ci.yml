@@ -1,0 +1,69 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  rust:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: medxz
+          POSTGRES_USER: medxz
+          POSTGRES_PASSWORD: medxz
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U medxz -d medxz"
+          --health-interval 2s
+          --health-timeout 2s
+          --health-retries 30
+    env:
+      DATABASE_URL: postgresql://medxz:medxz@localhost:5432/medxz
+      RUST_BACKTRACE: 1
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - uses: taiki-e/install-action@cargo-llvm-cov
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Format
+        run: cargo fmt --check
+
+      - name: Clippy (backend crates)
+        run: cargo clippy -p medxz-protocol -p medxz-server --all-targets -- -D warnings
+
+      - name: Test (backend crates)
+        run: cargo test -p medxz-protocol -p medxz-server
+
+      - name: Coverage (backend crates)
+        run: cargo llvm-cov -p medxz-protocol -p medxz-server --fail-under-lines 90
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+

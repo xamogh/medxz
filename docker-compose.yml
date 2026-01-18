@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: medxz
+      POSTGRES_USER: medxz
+      POSTGRES_PASSWORD: medxz
+    ports:
+      - "5432:5432"
+    volumes:
+      - medxz_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U medxz -d medxz"]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+
+volumes:
+  medxz_pg:
+

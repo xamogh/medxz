@@ -28,9 +28,3 @@ specta = { version = "=2.0.0-rc.22", features = ["derive"] }
 thiserror = "1"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
-
-[profile.release]
-codegen-units = 1
-lto = true
-panic = "abort"
-strip = "symbols"

@@ -9,7 +9,15 @@ pub fn builder() -> Builder<tauri::Wry> {
 
     #[cfg(debug_assertions)]
     builder
-        .export(Typescript::default(), "../src/bindings.ts")
+        .export(
+            Typescript::default().header(
+                r#"// These exports keep the generated file compatible with `noUnusedLocals`.
+export { TAURI_CHANNEL };
+export { __makeEvents__ };
+"#,
+            ),
+            "../src/bindings.ts",
+        )
         .expect("Failed to export typescript bindings");
 
     builder
