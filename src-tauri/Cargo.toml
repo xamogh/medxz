@@ -28,3 +28,5 @@ specta = { version = "=2.0.0-rc.22", features = ["derive"] }
 thiserror = "1"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+keyring = "2"
