@@ -9,24 +9,39 @@
     "dev:server": "cargo run -p medxz-server",
     "dev:app": "pnpm tauri dev",
     "dev:all": "pnpm dev:db && concurrently -k -n server,app -c blue,green \"pnpm dev:server\" \"pnpm dev:app\"",
+    "lint": "biome check .",
+    "lint:fix": "biome check . --write",
     "build": "tsc && vite build",
+    "test:backend": "cargo test -p medxz-protocol -p medxz-server",
+    "lint:backend": "cargo fmt --check && cargo clippy -p medxz-protocol -p medxz-server --all-targets -- -D warnings",
+    "check:tauri": "cargo check -p medxz",
+    "verify": "pnpm lint && pnpm build && pnpm lint:backend && pnpm test:backend && pnpm check:tauri",
     "preview": "vite preview",
     "tauri": "tauri",
-    "down": "docker compose down"
+    "down": "docker compose down",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,json,css,md}": [
+      "biome check --write --files-ignore-unknown=true"
+    ]
   },
   "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
     "@tauri-apps/api": "^2",
-    "@tauri-apps/plugin-opener": "^2"
+    "@tauri-apps/plugin-opener": "^2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.3.11",
+    "@tauri-apps/cli": "^2",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
     "concurrently": "^9.2.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
     "typescript": "~5.6.2",
-    "vite": "^6.0.3",
-    "@tauri-apps/cli": "^2"
+    "vite": "^6.0.3"
   }
 }
