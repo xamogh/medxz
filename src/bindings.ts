@@ -15,6 +15,30 @@ async greet(name: string) : Promise<Result<string, AppError>> {
     if(e instanceof Error) throw e;
     else return { status: "error", error: e  as any };
 }
+},
+async login(serverUrl: string, organizationCode: string, email: string, password: string) : Promise<Result<SessionInfo, AppError>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("login", { serverUrl, organizationCode, email, password }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+async me(serverUrl: string) : Promise<Result<SessionInfo | null, AppError>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("me", { serverUrl }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+async logout(serverUrl: string) : Promise<Result<null, AppError>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("logout", { serverUrl }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
 }
 }
 
@@ -28,7 +52,10 @@ async greet(name: string) : Promise<Result<string, AppError>> {
 
 /** user-defined types **/
 
-export type AppError = { type: "EmptyName" }
+export type AppError = { type: "EmptyName" } | { type: "InvalidServerUrl"; details: { message: string } } | { type: "Network"; details: { message: string } } | { type: "Keychain"; details: { message: string } } | { type: "ServerError"; details: { status: number; code: string; message: string } }
+export type OrganizationInfo = { id: string; code: string; name: string }
+export type SessionInfo = { organization: OrganizationInfo; user: UserInfo }
+export type UserInfo = { id: string; email: string; role: string }
 
 /** tauri-specta globals **/
 
