@@ -5,7 +5,7 @@
   "identifier": "com.medxz.app",
   "build": {
     "beforeDevCommand": "pnpm dev",
-    "devUrl": "http://localhost:1420",
+    "devUrl": "http://localhost:1423",
     "beforeBuildCommand": "pnpm build",
     "frontendDist": "../dist"
   },
